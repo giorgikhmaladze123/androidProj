@@ -1,64 +1,33 @@
-import * as React from 'react';
-import { Text, View, StyleSheet, TextInput, SafeAreaView, Button } from 'react-native';
-import Constants from 'expo-constants';
+import React from 'react'
+import { SafeAreaView } from 'react-native'
 
-// You can import from local files
-import AssetExample from './components/AssetExample';
+import { mainStyleSheet } from './styleSheets/main.styleSheet'
 
-// or any pure javascript modules available in npm
-import { Card } from 'react-native-paper';
+import MainScreen from './screens/main.screen'
+import DatafetcherScreen from './screens/dataFetcher.screen'
+import DatabaseScreen from './screens/database.screen'
+
 
 export default class App extends React.Component {
   state = {
-    searchValue: ''
+    activeScreen: 'main'
   }
 
-  onSearchChange = (searchValue) => this.setState({ searchValue })
+  setActiveScreen = (value) => {
+    this.setState({ activeScreen: value })
+  }
+
+  toMainScreen = () => this.setActiveScreen('main')
 
   render() {
-    const { searchValue } = this.state;
+    const { activeScreen } = this.state
 
     return (
-      <SafeAreaView>
-        <View style={styles.wapper}>
-          <TextInput
-            style={styles.searchInput}
-            onChangeText={this.onSearchChange}
-            placeholder="enter index"
-            value={searchValue}
-          />
-
-          <Button
-            title="მონაცემების წამოღება"
-            onPress={() => {}}
-          />
-          <Button
-            title="მონაცემების შენახვა"
-            onPress={() => {}}
-          />
-        </View>
+      <SafeAreaView style={mainStyleSheet.container}>
+        {activeScreen === 'main' && <MainScreen setActiveScreen={this.setActiveScreen} />}
+        {activeScreen === 'datafetcher' && <DatafetcherScreen toMainScreen={this.toMainScreen} />}
+        {activeScreen === 'database' && <DatabaseScreen toMainScreen={this.toMainScreen} />}
       </SafeAreaView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  wapper: {
-    display: "flex",
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '20px',
-    marginTop: '20px'
-  },
-  searchInput: {
-    backgroundColor: '#e8eaf6',
-    borderBottomColor: '#001970',
-    borderBottomWidth: '2px',
-    padding: '20px',
-    height: '60px',
-    width: '90%',
-    lineHeight: 60,
-    fontSize: '48px',
-    marginTop: '20px',
-  }
-});
